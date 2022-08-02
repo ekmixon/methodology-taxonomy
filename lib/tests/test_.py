@@ -7,17 +7,18 @@ import os
 
 class TestMethodologies(unittest.TestCase):
     def setUp(self):
-        self.methodologyFilenames = []
-        for filename in glob.glob(utils.METHODOLOGIES_DIR + '/*.json'):
-            self.methodologyFilenames.append(filename)
+        self.methodologyFilenames = list(
+            glob.glob(f'{utils.METHODOLOGIES_DIR}/*.json')
+        )
 
     def validate_schema(self, schema_file, data_file):
         print("validating ", data_file)
         schema = utils.get_json(schema_file)
         data = utils.get_json(data_file)
         jsonschema.Draft7Validator.check_schema(schema)
-        error = jsonschema.exceptions.best_match(jsonschema.Draft7Validator(schema).iter_errors(data))
-        if error:
+        if error := jsonschema.exceptions.best_match(
+            jsonschema.Draft7Validator(schema).iter_errors(data)
+        ):
             raise error
 
     def test_schemas(self):

@@ -36,20 +36,24 @@ class TestTemplateMapping(unittest.TestCase):
           self.check_template_exists(methodologyData['methodology'], methodologyData['children'])
 
   def check_template_exists(self, methodology, steps):
-      """
+    """
       Check a template mapping path from templates.json file
       and check methodology template exists (or not) in template repository
       if the template is not found, it will give an error for template missing
       """
-      print("validating methodology : %s" % methodology)
+    print(f"validating methodology : {methodology}")
 
-      for step in steps:
-        template_path = os.path.join('methodology', step['attribute'], methodology, step['template'])
-        template_url = utils.TEMPLATE_BASE_URL + template_path
-        response = requests.request("GET", template_url)
-        print("validating methodology step : %s" % step['key'])
+    for step in steps:
+      template_path = os.path.join('methodology', step['attribute'], methodology, step['template'])
+      template_url = utils.TEMPLATE_BASE_URL + template_path
+      response = requests.request("GET", template_url)
+      print(f"validating methodology step : {step['key']}")
 
-        self.assertEqual(response.status_code, 200, 'Missing template file for %s mapping' % methodology)
+      self.assertEqual(
+          response.status_code,
+          200,
+          f'Missing template file for {methodology} mapping',
+      )
 
 if __name__ == "__main__":
     unittest.main()
